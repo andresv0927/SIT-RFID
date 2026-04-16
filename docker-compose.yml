@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sit_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: sit_rfid
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot1234"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sit_backend
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: root1234
+      DB_NAME: sit_rfid
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  dashboard:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dashboard
+    container_name: sit_dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      API_URL: http://backend:5000
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

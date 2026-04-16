@@ -132,15 +132,23 @@ def update_vehicle(plate):
         return jsonify({"ok": False, "error": str(e)}), 500
 
 
-# ── DELETE /api/vehicles/<plate> ───────────────────────────────────────────────
-@vehicles_bp.route("/<plate>", methods=["DELETE"])
-def delete_vehicle(plate):
-    """Desactiva un vehículo (soft delete)."""
+# ── DELETE /api/vehicles/<plate>/force ─────────────────────────────────────────
+@vehicles_bp.route("/<plate>/force", methods=["DELETE"])
+def force_delete_vehicle(plate):
+    """Elimina definitivamente un vehículo con PIN de admin."""
     plate = plate.upper().replace(" ", "")
+    data  = request.get_json(silent=True) or {}
+    pin   = data.get("pin", "")
+    
+    if pin != "1234":
+        return jsonify({"ok": False, "error": "PIN incorrecto"}), 403
+    
     try:
         cur = db.cursor()
-        cur.execute("UPDATE vehicles SET active = 0 WHERE plate = %s", (plate,))
+        cur.execute("DELETE FROM turns WHERE vehicle_id = (SELECT id FROM vehicles WHERE plate = %s)", (plate,))
+        cur.execute("DELETE FROM vehicles WHERE plate = %s", (plate,))
         cur.close()
-        return jsonify({"ok": True, "message": f"{plate} desactivado."})
+        logger.info(f"Vehículo eliminado definitivamente: {plate}")
+        return jsonify({"ok": True, "message": f"{plate} eliminado."})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500

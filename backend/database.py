@@ -6,16 +6,17 @@ import mysql.connector
 from mysql.connector import Error
 from datetime import datetime
 from utils.logger import get_logger
+import os
 
 logger = get_logger("database")
 
 # ── Configuración ──────────────────────────────────────────────────────────────
 DB_CONFIG = {
-    "host":     "localhost",
-    "port":     3306,
-    "user":     "root",          
-    "password": "@nDres09",          
-    "database": "sit_rfid",
+    "host":     os.getenv("DB_HOST", "localhost"),
+    "port":     int(os.getenv("DB_PORT", 3306)),
+    "user":     os.getenv("DB_USER", "root"),
+    "password": os.getenv("DB_PASSWORD", "@nDres09"),
+    "database": os.getenv("DB_NAME", "sit_rfid"),
     "charset":  "utf8mb4",
     "autocommit": True,
 }
@@ -60,7 +61,17 @@ CREATE TABLE IF NOT EXISTS detections (
     detected_at DATETIME    DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 """
-
+CREATE_RFID_SQL = """
+CREATE TABLE IF NOT EXISTS rfid_tags (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    uid         VARCHAR(20)  NOT NULL UNIQUE,
+    vehicle_id  INT          NOT NULL,
+    plate       VARCHAR(10)  NOT NULL,
+    active      TINYINT(1)   DEFAULT 1,
+    created_at  DATETIME     DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id)
+) ENGINE=InnoDB;
+"""
 # ── Clase de conexión ──────────────────────────────────────────────────────────
 class Database:
 
@@ -88,6 +99,7 @@ class Database:
         cursor.execute(CREATE_VEHICLES_SQL)
         cursor.execute(CREATE_TURNS_SQL)
         cursor.execute(CREATE_DETECTIONS_SQL)
+        cursor.execute(CREATE_RFID_SQL)
         cursor.close()
 
     def cursor(self):

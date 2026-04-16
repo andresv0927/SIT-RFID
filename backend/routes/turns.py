@@ -53,15 +53,15 @@ def turn_stats():
     try:
         cur = db.cursor()
         cur.execute("""
-            SELECT
-                COUNT(*)                                        AS total,
-                SUM(status = 'waiting')                         AS waiting,
-                SUM(status = 'attending')                       AS attending,
-                SUM(status = 'done')                            AS done,
-                SUM(status = 'cancelled')                       AS cancelled
-            FROM turns
-            WHERE DATE(created_at) = CURDATE()
-        """)
+    SELECT
+        COUNT(*)                                        AS total,
+        COALESCE(SUM(status = 'waiting'), 0)            AS waiting,
+        COALESCE(SUM(status = 'attending'), 0)          AS attending,
+        COALESCE(SUM(status = 'done'), 0)               AS done,
+        COALESCE(SUM(status = 'cancelled'), 0)          AS cancelled
+    FROM turns
+    WHERE DATE(created_at) = CURDATE()
+""")
         stats = cur.fetchone()
         cur.close()
         return jsonify({"ok": True, "data": stats})
