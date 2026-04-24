@@ -1,0 +1,118 @@
+-- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+--
+-- Host: localhost    Database: sit_rfid
+-- ------------------------------------------------------
+-- Server version	8.0.43
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `detections`
+--
+
+DROP TABLE IF EXISTS `detections`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `detections` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `plate` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `confidence` float DEFAULT '0',
+  `is_known` tinyint(1) DEFAULT '0',
+  `raw_text` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `detected_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detections`
+--
+
+LOCK TABLES `detections` WRITE;
+/*!40000 ALTER TABLE `detections` DISABLE KEYS */;
+INSERT INTO `detections` VALUES (1,'AAA123',100,0,'AAA 123','2026-03-08 04:22:25'),(2,'AAA123',100,1,'AAA 123','2026-03-08 04:22:30'),(3,'AAA123',100,1,'AAA 123','2026-03-08 04:22:34'),(4,'AAA123',100,1,'AAA 123','2026-03-08 04:22:39'),(5,'AAA123',100,1,'AAA 123','2026-03-08 04:22:44'),(6,'AAA123',100,1,'AAA 123','2026-03-08 04:22:49'),(7,'AAA123',100,1,'AAA 123','2026-03-08 04:22:53'),(8,'AAA123',100,1,'AAA 123','2026-03-08 04:22:58'),(9,'AAA123',100,1,'AAA 123','2026-03-08 04:23:03'),(10,'AAA123',100,1,'AAA 123','2026-03-08 04:23:08'),(11,'AAA123',100,1,'AAA 123','2026-03-08 04:23:12'),(12,'VUS123',30,0,'VUS 123','2026-03-10 23:23:07'),(13,'AGH430',40,0,'AGH 430','2026-03-10 23:24:10'),(14,'AGH430',50,1,'AGH 430','2026-03-10 23:24:14'),(15,'AGH430',50,1,'AGH 430','2026-03-10 23:24:18'),(16,'AGH430',50,1,'AGH 430','2026-03-10 23:24:22'),(17,'AGH430',50,1,'AGH 430','2026-03-10 23:24:27'),(18,'AGH430',50,1,'AGH 430','2026-03-10 23:24:31'),(19,'AGH430',50,1,'AGH 430','2026-03-10 23:24:35'),(20,'AGH430',50,1,'AGH 430','2026-03-10 23:24:40'),(21,'AGH430',50,1,'AGH 430','2026-03-10 23:24:45'),(22,'AGH430',50,1,'AGH 430','2026-03-10 23:24:49'),(23,'AGH430',50,1,'AGH 430','2026-03-10 23:24:53'),(24,'AGH430',50,1,'AGH 430','2026-03-10 23:24:57'),(25,'AGH430',50,1,'AGH 430','2026-03-10 23:25:01'),(26,'AGH430',50,1,'AGH 430','2026-03-10 23:25:05'),(27,'AGH430',50,1,'AGH 430','2026-03-10 23:25:09'),(28,'AGH430',50,1,'AGH 430','2026-03-10 23:25:14'),(29,'AGH430',40,1,'AGH 430','2026-03-10 23:25:19'),(30,'AGH430',30,1,'AGH 430','2026-03-10 23:25:23'),(31,'TZN10F',30,0,'TZN 10F','2026-03-10 23:25:36'),(32,'TZN10F',30,1,'TZN 10F','2026-03-10 23:25:41'),(33,'TZN10F',30,1,'TZN 10F','2026-03-10 23:25:45'),(34,'TZN10F',30,1,'TZN 10F','2026-03-10 23:25:49'),(35,'TZN10F',30,1,'TZN 10F','2026-03-10 23:25:54'),(36,'TZN10F',30,1,'TZN 10F','2026-03-10 23:26:00'),(37,'TZN10F',30,1,'TZN 10F','2026-03-10 23:26:05'),(38,'TZN10F',30,1,'TZN 10F','2026-03-10 23:26:56'),(39,'TZN10F',30,1,'TZN 10F','2026-03-10 23:27:01'),(40,'TZN10F',30,1,'TZN 10F','2026-03-10 23:27:06'),(41,'IZN10F',30,0,'IZN 10F','2026-03-10 23:27:32'),(42,'IZN10F',40,1,'IZN 10F','2026-03-10 23:27:37'),(43,'IZN10F',40,1,'IZN 10F','2026-03-10 23:27:41'),(44,'IZN10F',40,1,'IZN 10F','2026-03-10 23:27:45'),(45,'IZN10F',40,1,'IZN 10F','2026-03-10 23:27:50'),(46,'IZN10F',40,1,'IZN 10F','2026-03-10 23:27:57'),(47,'IZN10F',40,1,'IZN 10F','2026-03-10 23:28:06'),(48,'IZN10F',30,1,'IZN 10F','2026-03-10 23:28:22'),(49,'IZN10F',30,1,'IZN 10F','2026-03-10 23:28:27'),(50,'IZN10F',30,1,'IZN 10F','2026-03-10 23:28:31'),(51,'IZN10F',30,1,'IZN 10F','2026-03-10 23:28:35'),(52,'IZN10F',30,1,'IZN 10F','2026-03-10 23:28:39'),(53,'IZN10F',30,1,'IZN 10F','2026-03-10 23:28:45'),(54,'IZN10F',30,1,'IZN 10F','2026-03-10 23:28:50'),(55,'IZN10F',30,1,'IZN 10F','2026-03-10 23:29:26'),(56,'IZN10F',30,1,'IZN 10F','2026-03-10 23:29:30'),(57,'IZN10F',30,1,'IZN 10F','2026-03-10 23:29:35'),(58,'IZN10F',30,1,'IZN 10F','2026-03-10 23:29:39');
+/*!40000 ALTER TABLE `detections` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `turns`
+--
+
+DROP TABLE IF EXISTS `turns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `turns` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `vehicle_id` int NOT NULL,
+  `plate` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `turn_number` int NOT NULL,
+  `status` enum('waiting','attending','done','cancelled') COLLATE utf8mb4_unicode_ci DEFAULT 'waiting',
+  `score` float DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `vehicle_id` (`vehicle_id`),
+  CONSTRAINT `turns_ibfk_1` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `turns`
+--
+
+LOCK TABLES `turns` WRITE;
+/*!40000 ALTER TABLE `turns` DISABLE KEYS */;
+INSERT INTO `turns` VALUES (1,1,'AAA123',1,'done',100,'2026-03-08 04:22:25','2026-03-08 04:28:17'),(2,2,'VUS123',1,'waiting',30,'2026-03-10 23:23:07','2026-03-10 23:23:07'),(3,3,'AGH430',2,'waiting',40,'2026-03-10 23:24:10','2026-03-10 23:24:10'),(4,4,'TZN10F',3,'waiting',30,'2026-03-10 23:25:36','2026-03-10 23:25:36'),(5,5,'IZN10F',4,'cancelled',30,'2026-03-10 23:27:32','2026-03-10 23:29:01');
+/*!40000 ALTER TABLE `turns` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vehicles`
+--
+
+DROP TABLE IF EXISTS `vehicles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vehicles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `plate` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `plate_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `owner_doc` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `active` tinyint(1) DEFAULT '1',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `plate` (`plate`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vehicles`
+--
+
+LOCK TABLES `vehicles` WRITE;
+/*!40000 ALTER TABLE `vehicles` DISABLE KEYS */;
+INSERT INTO `vehicles` VALUES (1,'AAA123','particular',NULL,NULL,1,'2026-03-08 04:22:25','2026-03-08 04:22:25'),(2,'VUS123','particular',NULL,NULL,1,'2026-03-10 23:23:07','2026-03-10 23:23:07'),(3,'AGH430','particular',NULL,NULL,1,'2026-03-10 23:24:10','2026-03-10 23:24:10'),(4,'TZN10F','moto',NULL,NULL,1,'2026-03-10 23:25:36','2026-03-10 23:25:36'),(5,'IZN10F','moto',NULL,NULL,1,'2026-03-10 23:27:32','2026-03-10 23:27:32');
+/*!40000 ALTER TABLE `vehicles` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-04-07 22:52:26

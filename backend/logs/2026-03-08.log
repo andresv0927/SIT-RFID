@@ -1,0 +1,4 @@
+[2026-03-08 04:13:40] [ERROR] [database] Error MySQL: 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+[2026-03-08 04:18:31] [INFO] [database] Conexión MySQL establecida.
+[2026-03-08 04:18:31] [INFO] [database] Conexión MySQL establecida.
+[2026-03-08 04:22:25] [INFO] [detections] Nueva placa detectada y registrada: AAA123 → turno #1

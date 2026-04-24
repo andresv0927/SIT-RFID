@@ -27,7 +27,6 @@ def list_vehicles():
         """)
         rows = cur.fetchall()
         cur.close()
-        # serializar fechas
         for r in rows:
             r["created_at"] = str(r["created_at"])
             r["updated_at"] = str(r["updated_at"])
@@ -40,7 +39,7 @@ def list_vehicles():
 # ── GET /api/vehicles/<plate> ──────────────────────────────────────────────────
 @vehicles_bp.route("/<plate>", methods=["GET"])
 def get_vehicle(plate):
-    """Busca un vehículo por placa. Usado por el módulo OCR."""
+    """Busca un vehículo por placa."""
     plate = plate.upper().replace(" ", "")
     try:
         cur = db.cursor()
@@ -50,7 +49,7 @@ def get_vehicle(plate):
         if row:
             row["created_at"] = str(row["created_at"])
             row["updated_at"] = str(row["updated_at"])
-            return jsonify({"ok": True, "found": True,  "data": row})
+            return jsonify({"ok": True, "found": True, "data": row})
         return jsonify({"ok": True, "found": False, "data": None})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
@@ -62,13 +61,14 @@ def create_vehicle():
     """
     Registra un nuevo vehículo.
     Si la placa ya existe → retorna error 409 sin insertar.
-    Body JSON: { plate, plate_type, owner_name?, owner_doc? }
+    Body JSON: { plate, plate_type, owner_name?, owner_doc?, rfid_uid? }
     """
-    data = request.get_json(silent=True) or {}
+    data       = request.get_json(silent=True) or {}
     plate      = (data.get("plate") or "").upper().replace(" ", "")
     plate_type = data.get("plate_type", "particular")
     owner_name = data.get("owner_name")
     owner_doc  = data.get("owner_doc")
+    rfid_uid   = data.get("rfid_uid")
 
     if not plate:
         return jsonify({"ok": False, "error": "plate requerida"}), 400
@@ -76,7 +76,6 @@ def create_vehicle():
     try:
         cur = db.cursor()
 
-        # ── Verificar duplicado ───────────────────────────────────────────────
         cur.execute("SELECT id, plate FROM vehicles WHERE plate = %s", (plate,))
         existing = cur.fetchone()
         if existing:
@@ -86,13 +85,12 @@ def create_vehicle():
                 "error":   "PLATE_EXISTS",
                 "message": f"La placa {plate} ya está registrada.",
                 "data":    existing
-            }), 409  # Conflict
+            }), 409
 
-        # ── Insertar ──────────────────────────────────────────────────────────
         cur.execute("""
-            INSERT INTO vehicles (plate, plate_type, owner_name, owner_doc)
-            VALUES (%s, %s, %s, %s)
-        """, (plate, plate_type, owner_name, owner_doc))
+            INSERT INTO vehicles (plate, plate_type, owner_name, owner_doc, rfid_uid)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (plate, plate_type, owner_name, owner_doc, rfid_uid))
         new_id = cur.lastrowid
         cur.close()
 
@@ -118,12 +116,13 @@ def update_vehicle(plate):
         cur = db.cursor()
         cur.execute("""
             UPDATE vehicles
-            SET owner_name = %s, owner_doc = %s, active = %s
+            SET owner_name = %s, owner_doc = %s, active = %s, rfid_uid = %s
             WHERE plate = %s
         """, (
             data.get("owner_name"),
             data.get("owner_doc"),
             data.get("active", 1),
+            data.get("rfid_uid"),
             plate
         ))
         cur.close()
@@ -139,10 +138,10 @@ def force_delete_vehicle(plate):
     plate = plate.upper().replace(" ", "")
     data  = request.get_json(silent=True) or {}
     pin   = data.get("pin", "")
-    
+
     if pin != "1234":
         return jsonify({"ok": False, "error": "PIN incorrecto"}), 403
-    
+
     try:
         cur = db.cursor()
         cur.execute("DELETE FROM turns WHERE vehicle_id = (SELECT id FROM vehicles WHERE plate = %s)", (plate,))
@@ -152,3 +151,44 @@ def force_delete_vehicle(plate):
         return jsonify({"ok": True, "message": f"{plate} eliminado."})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+
+
+# ── POST /api/vehicles/rfid ────────────────────────────────────────────────────
+@vehicles_bp.route("/rfid", methods=["POST"])
+def check_rfid():
+    """
+    Recibe un UID de tarjeta RFID y verifica si está autorizado.
+    Body JSON: { uid }
+    """
+    data = request.get_json(silent=True) or {}
+    uid  = (data.get("uid") or "").strip()
+
+    if not uid:
+        return jsonify({"ok": False, "authorized": False,
+                        "message": "UID requerido"}), 400
+    try:
+        cur = db.cursor()
+        cur.execute(
+            "SELECT * FROM vehicles WHERE rfid_uid = %s AND active = 1", (uid,)
+        )
+        vehicle = cur.fetchone()
+        cur.close()
+
+        if vehicle:
+            return jsonify({
+                "ok":         True,
+                "authorized": True,
+                "message":    f"Bienvenido — {vehicle['plate']}",
+                "plate":      vehicle["plate"],
+                "plate_type": vehicle["plate_type"]
+            })
+
+        return jsonify({
+            "ok":         True,
+            "authorized": False,
+            "message":    "Tarjeta no registrada"
+        })
+
+    except Exception as e:
+        return jsonify({"ok": False, "authorized": False,
+                        "error": str(e)}), 500

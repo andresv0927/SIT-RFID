@@ -8,6 +8,7 @@ from database import db
 from routes.vehicles   import vehicles_bp
 from routes.turns      import turns_bp
 from routes.detections import detections_bp
+from routes.rfid       import rfid_bp
 
 app = Flask(__name__)
 CORS(app)  # Permite peticiones desde el dashboard
@@ -16,6 +17,7 @@ CORS(app)  # Permite peticiones desde el dashboard
 app.register_blueprint(vehicles_bp)
 app.register_blueprint(turns_bp)
 app.register_blueprint(detections_bp)
+app.register_blueprint(rfid_bp)
 
 
 # ── Health check ───────────────────────────────────────────────────────────────

@@ -1,0 +1,9 @@
+[2026-03-10 23:17:21] [INFO] [database] Conexión MySQL establecida.
+[2026-03-10 23:17:22] [INFO] [database] Conexión MySQL establecida.
+[2026-03-10 23:18:15] [INFO] [database] Conexión MySQL establecida.
+[2026-03-10 23:18:16] [INFO] [database] Conexión MySQL establecida.
+[2026-03-10 23:19:32] [INFO] [database] Conexión MySQL establecida.
+[2026-03-10 23:23:07] [INFO] [detections] Nueva placa detectada y registrada: VUS123 → turno #1
+[2026-03-10 23:24:10] [INFO] [detections] Nueva placa detectada y registrada: AGH430 → turno #2
+[2026-03-10 23:25:36] [INFO] [detections] Nueva placa detectada y registrada: TZN10F → turno #3
+[2026-03-10 23:27:32] [INFO] [detections] Nueva placa detectada y registrada: IZN10F → turno #4
