@@ -415,7 +415,7 @@ with tab2:
                                    placeholder="· · · ·", label_visibility="collapsed")
             if st.button("✕ ELIMINAR DETECCIÓN", key="del_det"):
                 if pin_d == PIN:
-                    res = api_delete(f"/detect/{d['id']}")
+                    res = api_delete(f"/detect/{d['id']}", {"pin": pin_d})
                     if res.get("ok"):
                         st.success("Detección eliminada.")
                         st.cache_data.clear(); st.rerun()
